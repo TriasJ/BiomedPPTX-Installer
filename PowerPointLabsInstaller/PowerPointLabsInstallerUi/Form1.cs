@@ -94,6 +94,7 @@ namespace PowerPointLabsInstallerUi
                 {
                     RunInstaller();
                     DeploySmartLibraryAssets();
+                    DeploySqliteNative();
                     DeployBioArtIndex();
                     DeployTutorial();
                 }
@@ -115,6 +116,7 @@ namespace PowerPointLabsInstallerUi
                     ErrorWindowTitle);
                 RunInstaller();
                 DeploySmartLibraryAssets();
+                DeploySqliteNative();
                 DeployBioArtIndex();
                 DeployTutorial();
             }
@@ -322,6 +324,46 @@ namespace PowerPointLabsInstallerUi
 
                 string targetPath = Path.Combine(targetDir, "Tutorial.pptx");
                 File.Copy(tutorialSource, targetPath, true);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void DeploySqliteNative()
+        {
+            try
+            {
+                string targetDir = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "BiomedPPTX", "Assets", "native");
+
+                string x64Source = Path.Combine(Application.StartupPath, "x64", "SQLite.Interop.dll");
+                string x86Source = Path.Combine(Application.StartupPath, "x86", "SQLite.Interop.dll");
+
+                if (!File.Exists(x64Source))
+                {
+                    string buildDir = Path.Combine(Application.StartupPath);
+                    x64Source = Path.Combine(buildDir, "SQLite.Interop.x64.dll");
+                    x86Source = Path.Combine(buildDir, "SQLite.Interop.x86.dll");
+                }
+
+                if (File.Exists(x64Source))
+                {
+                    string x64Dir = Path.Combine(targetDir, "x64");
+                    Directory.CreateDirectory(x64Dir);
+                    File.Copy(x64Source, Path.Combine(x64Dir, "SQLite.Interop.dll"), true);
+                }
+
+                if (File.Exists(x86Source))
+                {
+                    string x86Dir = Path.Combine(targetDir, "x86");
+                    Directory.CreateDirectory(x86Dir);
+                    File.Copy(x86Source, Path.Combine(x86Dir, "SQLite.Interop.dll"), true);
+                }
+
+                label1.Text = "SQLite native libraries deployed.";
+                label1.Refresh();
             }
             catch (Exception)
             {

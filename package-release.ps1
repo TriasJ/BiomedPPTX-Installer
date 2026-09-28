@@ -76,6 +76,19 @@ if ((Test-Path $smartLibrary) -and (Test-Path $smartLib)) {
     $sizeMB = [math]::Round((Get-Item $smartAssetsZip).Length / 1MB, 1)
     Write-Host "[OK] smart-assets.zip ($sizeMB MB)" -ForegroundColor Green
 
+    # Add native SQLite interop DLLs to staging
+    $buildRelease = Join-Path $ScratchDir "BiomedPPTX\PowerPointLabs\PowerPointLabs\bin\Release"
+    $buildDebug = Join-Path $ScratchDir "BiomedPPTX\PowerPointLabs\PowerPointLabs\bin\Debug"
+    $buildDir = if (Test-Path "$buildRelease\x64\SQLite.Interop.dll") { $buildRelease } else { $buildDebug }
+
+    if (Test-Path "$buildDir\x64\SQLite.Interop.dll") {
+        New-Item -ItemType Directory -Force -Path "$staging\native\x64" | Out-Null
+        New-Item -ItemType Directory -Force -Path "$staging\native\x86" | Out-Null
+        Copy-Item "$buildDir\x64\SQLite.Interop.dll" "$staging\native\x64\" -Force
+        Copy-Item "$buildDir\x86\SQLite.Interop.dll" "$staging\native\x86\" -Force
+        Write-Host "  - SQLite native interop DLLs" -ForegroundColor Gray
+    }
+
     # Cleanup staging
     Remove-Item $staging -Recurse -Force
 } else {
