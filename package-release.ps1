@@ -86,6 +86,11 @@ if ((Test-Path $smartLibrary) -and (Test-Path $smartLib)) {
         New-Item -ItemType Directory -Force -Path "$staging\native\x86" | Out-Null
         Copy-Item "$buildDir\x64\SQLite.Interop.dll" "$staging\native\x64\" -Force
         Copy-Item "$buildDir\x86\SQLite.Interop.dll" "$staging\native\x86\" -Force
+
+        New-Item -ItemType Directory -Force -Path (Join-Path $OutputDir "x64") | Out-Null
+        New-Item -ItemType Directory -Force -Path (Join-Path $OutputDir "x86") | Out-Null
+        Copy-Item "$buildDir\x64\SQLite.Interop.dll" (Join-Path $OutputDir "x64\") -Force
+        Copy-Item "$buildDir\x86\SQLite.Interop.dll" (Join-Path $OutputDir "x86\") -Force
         Write-Host "  - SQLite native interop DLLs" -ForegroundColor Gray
     }
 
