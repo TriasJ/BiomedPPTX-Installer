@@ -372,8 +372,13 @@ namespace PowerPointLabsInstallerUi
 
         private string FindSqliteInterop(string arch)
         {
+            string appDataNative = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "BiomedPPTX", "Assets", "native");
+
             string[] candidates = new string[]
             {
+                Path.Combine(appDataNative, arch, "SQLite.Interop.dll"),
                 Path.Combine(Application.StartupPath, arch, "SQLite.Interop.dll"),
                 Path.Combine(_targetInstallFolder, arch, "SQLite.Interop.dll"),
                 Path.Combine(Application.StartupPath, "SQLite.Interop." + arch + ".dll")
