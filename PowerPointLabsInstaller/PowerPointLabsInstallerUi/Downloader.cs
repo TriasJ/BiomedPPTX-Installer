@@ -76,7 +76,7 @@ namespace PowerPointLabsInstallerUi
                 OnWhenFailure();
                 MessageBox.Show(
                     "Please check your network connection and try again.",
-                    "PowerPointLabs Installer",
+                    "BiomedPPTX Installer",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
